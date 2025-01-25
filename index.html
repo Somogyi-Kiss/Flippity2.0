@@ -64,7 +64,7 @@
             const cards = data.split('\n').map(line => line.split(' - '));
             let output = '<div style="display: flex; flex-wrap: wrap; gap: 1rem;">';
             cards.forEach(([term, definition]) => {
-                output += `<div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px;">`;
+                output += `<div style="border: 1px solid #000000; padding: 1rem; border-radius: 8px;">`;
                 output += `<strong>${term}</strong><br><small>${definition}</small>`;
                 output += `</div>`;
             });
