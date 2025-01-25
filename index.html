@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Flippity Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 1rem;
+        }
+        .tool {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .tool h2 {
+            margin: 0 0 0.5rem;
+        }
+        .tool p {
+            margin: 0 0 1rem;
+        }
+        .tool a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        .tool a:hover {
+            background-color: #45a049;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #f1f1f1;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function showTool(toolId) {
+            document.querySelectorAll('.tool-page').forEach(page => page.classList.add('hidden'));
+            document.getElementById(toolId).classList.remove('hidden');
+        }
+
+        function generateFlashcards() {
+            const data = document.querySelector('#flashcards textarea').value;
+            const cards = data.split('\n').map(line => line.split(' - '));
+            let output = '<div style="display: flex; flex-wrap: wrap; gap: 1rem;">';
+            cards.forEach(([term, definition]) => {
+                output += `<div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px;">`;
+                output += `<strong>${term}</strong><br><small>${definition}</small>`;
+                output += `</div>`;
+            });
+            output += '</div>';
+            document.querySelector('#flashcards-output').innerHTML = output;
+        }
+
+        function generateQuiz() {
+            const data = document.querySelector('#quiz textarea').value;
+            const questions = data.split('\n').map(line => line.split(' - '));
+            let output = '';
+            questions.forEach(([question, answer], index) => {
+                output += `<div style="margin-bottom: 1rem;">`;
+                output += `<strong>Q${index + 1}: ${question}</strong><br>`;
+                output += `<input type="text" placeholder="Your answer..." data-answer="${answer}" onblur="checkAnswer(this)">`;
+                output += `<span style="margin-left: 1rem;"></span>`;
+                output += `</div>`;
+            });
+            document.querySelector('#quiz-output').innerHTML = output;
+        }
+
+        function checkAnswer(input) {
+            const correct = input.getAttribute('data-answer').trim().toLowerCase();
+            const userAnswer = input.value.trim().toLowerCase();
+            const feedback = input.nextElementSibling;
+            feedback.textContent = userAnswer === correct ? '✔️ Correct' : '❌ Incorrect';
+        }
+
+        function generateSpinner() {
+            const data = document.querySelector('#spinner textarea').value;
+            const options = data.split('\n');
+            const randomIndex = Math.floor(Math.random() * options.length);
+            document.querySelector('#spinner-output').textContent = `Result: ${options[randomIndex]}`;
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Simple Flippity Clone</h1>
+        <p>Select a tool to get started.</p>
+    </header>
+    <main>
+        <div class="tool">
+            <h2>Flashcards</h2>
+            <p>Create interactive flashcards from your data.</p>
+            <a href="#" onclick="showTool('flashcards')">Use Flashcards</a>
+        </div>
+        <div class="tool">
+            <h2>Quiz</h2>
+            <p>Generate a quiz from your data.</p>
+            <a href="#" onclick="showTool('quiz')">Use Quiz</a>
+        </div>
+        <div class="tool">
+            <h2>Spinner</h2>
+            <p>Create a random spinner for decision-making or games.</p>
+            <a href="#" onclick="showTool('spinner')">Use Spinner</a>
+        </div>
+
+        <!-- Flashcards Page -->
+        <div id="flashcards" class="tool-page hidden">
+            <h2>Flashcards</h2>
+            <p>Enter your data to create flashcards.</p>
+            <textarea rows="5" cols="40" placeholder="Enter data in the format: Term - Definition"></textarea>
+            <br>
+            <button onclick="generateFlashcards()">Generate Flashcards</button>
+            <div id="flashcards-output" style="margin-top: 1rem;"></div>
+        </div>
+
+        <!-- Quiz Page -->
+        <div id="quiz" class="tool-page hidden">
+            <h2>Quiz</h2>
+            <p>Enter your questions and answers to generate a quiz.</p>
+            <textarea rows="5" cols="40" placeholder="Enter data in the format: Question - Answer"></textarea>
+            <br>
+            <button onclick="generateQuiz()">Generate Quiz</button>
+            <div id="quiz-output" style="margin-top: 1rem;"></div>
+        </div>
+
+        <!-- Spinner Page -->
+        <div id="spinner" class="tool-page hidden">
+            <h2>Spinner</h2>
+            <p>Enter options for the spinner.</p>
+            <textarea rows="5" cols="40" placeholder="Enter options, one per line"></textarea>
+            <br>
+            <button onclick="generateSpinner()">Generate Spinner</button>
+            <div id="spinner-output" style="margin-top: 1rem; font-weight: bold;"></div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 Simple Flippity Clone</p>
+    </footer>
+</body>
+</html>
